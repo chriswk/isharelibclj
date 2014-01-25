@@ -13,21 +13,21 @@
 (defn display-movie [movie]
   (log/debug movie)
   (let [data (get (get movie "movie") :data)
-        id (get data :tmdb_id)
-        title (:title data)
-        releaseDate (:releaseDate movie)]
+        tmdbid (get data :tmdbid)
+        title (get data :title)
+        releaseDate (get data :releaseDate)]
     (log/debug data)
-    (log/debug (:tmdb_id data))
+    (log/debug tmdbid)
     (html
       [:tr
-       [:td id]
+       [:td tmdbid]
        [:td title]
        [:td releaseDate]
        [:td
-        [:a {:href (str "/movies/" id)} "Show"]]
+        [:a {:href (str "/movies/" tmdbid)} "Show"]]
        [:td
-        [:a {:href (str "/movies/" id "/edit") } "Edit"]]
-       [:td (delete-movie-link id)]]
+        [:a {:href (str "/movies/" tmdbid "/edit") } "Edit"]]
+       [:td (delete-movie-link tmdbid)]]
       )))
 
 (defn display-movies [movies]
@@ -51,7 +51,7 @@
     [:div#movie-form.form.form-stacked
      (form-to [:post "/movies"]
        (label "tmdbid" "TMDB id")
-       (text-field "tmdb id")
+       (text-field "tmdbid")
        [:br]
        (submit-button {:id "movieAdd"} "Add it"))]
     [:div#movies]))

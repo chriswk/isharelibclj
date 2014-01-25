@@ -21,7 +21,7 @@
 
 (defn configure-uniqueness-on-tmdb-id []
   (conn)
-  (constraints/create-unique "Movie" "tmdb_id")
+  (constraints/create-unique "Movie" "tmdbid")
   )
 
 (defn delete [id]
