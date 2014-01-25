@@ -2,7 +2,8 @@
   (:use [hiccup.core :only (html)]
         [hiccup.form :only (form-to label text-field submit-button hidden-field)])
   (:require [isharelib.views.layout :as layout]
-            [isharelib.models.movie :as movie]))
+            [isharelib.models.movie :as movie]
+            [isharelib.log :as log]))
 
 (defn delete-movie-link [id]
   (html [:form {:method "post" :action (str "/movie/" id) :class "button_to"}
@@ -10,7 +11,13 @@
          (submit-button {:class "destroy" :data-confirm "Are you sure?"} "Delete")]))
 
 (defn display-movie [movie]
-  (let [id (:id movie) title (:title (:data movie)) releaseDate (:releaseDate (:data movie))]
+  (log/debug movie)
+  (let [data (get (get movie "movie") :data)
+        id (get data :tmdb_id)
+        title (:title data)
+        releaseDate (:releaseDate movie)]
+    (log/debug data)
+    (log/debug (:tmdb_id data))
     (html
       [:tr
        [:td id]
@@ -43,10 +50,8 @@
   (html
     [:div#movie-form.form.form-stacked
      (form-to [:post "/movies"]
-       (label "title" "Movie title")
-       (text-field "title")
-       (label "year" "Release year")
-       (text-field "year")
+       (label "tmdbid" "TMDB id")
+       (text-field "tmdb id")
        [:br]
        (submit-button {:id "movieAdd"} "Add it"))]
     [:div#movies]))

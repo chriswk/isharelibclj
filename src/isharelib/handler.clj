@@ -28,6 +28,8 @@
   (route/resources "/")
   (route/not-found (layout/four-oh-four)))
 
+(refresh-assets!)
+
 (def app
   (-> (handler/api app-routes)
       (wrap-multipart-params)

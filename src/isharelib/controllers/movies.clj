@@ -6,10 +6,13 @@
             [isharelib.views.movies :as view]
             [isharelib.models.movie :as model]
             [isharelib.tmdb.http :as tmdb-query]
-            [clj-json [core :as json]]))
+            [clj-json [core :as json]]
+            [isharelib.log :as log]))
 
 (defn index []
-  (view/index (model/all)))
+  (let [m model/all]
+    (log/debug m)
+  (view/index (m))))
 
 (defn new-movie []
   (view/new-movie))
@@ -25,10 +28,12 @@
           :id (get m "id")})
     (get (tmdb-query/movie-search title) "results")))
 
+(defn add-movie [params]
+  (model/add-movie params)
+  (ring/redirect "/movies"))
 (defroutes app-routes
   (GET "/movies" [] (index))
   (GET "/movies/new" [] (new-movie))
-  (GET "/movies/search/:title/xhr" [title] (json-response (search-movie title)))
-  (GET "/movies/search/:title" [title] (view/movies (search-movie title)))
+  (POST "/movies" {params :params} (add-movie params))
   (DELETE ["/movies/:id", :id #"[0-9]+"] [id] (del-movie (Integer. id)))
   (GET ["/movies/:id/delete", :id #"[0-9]+"] [id] (del-movie (Integer. id))))

@@ -6,16 +6,17 @@
   (:require [isharelib.tmdb.config :as tmdb-config]))
 
 (defn topbar []
-  (html [:div.navbar.navbar-inverse.navbar-fixed-top
-         [:div.navbar-inner
-          [:div.container-fluid
-           [:a {:href "/" :class "brand"} "Isharelib"]
-           [:ul.nav
-            [:li
-             [:a {:href "/movies"} "Movies"]]
-            [:li
-             [:a {:href "/people"} "People"]]
-            [:li.divider-vertical]
+  (html [:div.navbar.navbar-inverse.navbar-fixed-top {:role "navigation"}
+         [:div.container
+          [:div.navbar-header
+           [:a {:href "/" :class "navbar-brand"} "Isharelib"]]
+          [:div.navbar-collapse.collapse
+            [:ul.nav.navbar-nav
+              [:li
+                [:a {:href "/movies"} "Movies"]]
+              [:li
+                [:a {:href "/people"} "People"]]
+              [:li.divider-vertical]
             ]]]])
   )
 
@@ -63,9 +64,9 @@
      (topbar)
      [:div.container-fluid
       [:div.row-fluid
-       [:div.span2
+       [:div.col-md-4
         (sidebar)]
-       [:div.span10
+       [:div.col-md-8
         body]
        [:hr]
        (footer)
